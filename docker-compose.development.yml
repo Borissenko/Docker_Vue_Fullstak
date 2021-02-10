@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./frontend
+    command: npm run serve
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend/src:/usr/src/app/src
+      # объективная папка докер-проекта : папка в контейнере
+      # что копируем(там, где мы кодим и вносим правки) : куда копируем(что отрабатывает для демонстрации)
+
+  api:
+    command: npm run dev
+    volumes:
+      - ./api/src:/usr/src/app/src
+      - ./api/initialData:/usr/src/app/initialData
+    environment:
+      - MODE=dev
+
+  auth:
+    command: npm run dev
+    volumes:
+      - ./auth/src:/usr/src/app/src
+
+  nginx:
+    volumes:
+      - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/default.conf   #  именно default.conf

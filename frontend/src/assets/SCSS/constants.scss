@@ -1,0 +1,33 @@
+// Main color
+$default-color           : #ffffff;
+$primary-color           : #444ce0;
+$success-color           : #26de81;
+$danger-color            : #fc5c65;
+$warning-color           : #fed330;
+$light-color             : #999999;
+$purple-color            : #8854d0;
+
+
+// Media queries
+$maxDesktopWidth: 1280px;
+$desktop: 800px;
+$tablet: 600px;
+$mobile: 480px;
+
+
+// Font
+$mainFontColor           : #333333;
+$mainFontSize            : 16px;
+$mainFontSizeNumber      : 16;
+$mainFontWeight          : 400;
+$mainLineHeight          : 1.4;
+
+
+@function rem($n) {
+  @return #{($n / $mainFontSizeNumber)}rem;
+}
+
+
+
+
+

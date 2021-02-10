@@ -1,0 +1,90 @@
+version: '3'
+# это комментарий
+
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./frontend
+    container_name: dc_frontend
+    ports:
+      - "3000:8080"
+    restart: unless-stopped
+    command: serve -s dist -l 8080
+    networks:
+      - my-network
+
+  api:
+    build: ./api
+    container_name: dc_api
+    command: npm run start
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - MONGO_URL=mongodb://api_db:27017/api
+      - AUTH_API_URL=http://auth:3002/api
+      - MODE=production
+      - ROOT_PATH=/usr/src/app/
+    depends_on:
+      - api_db
+    networks:
+      - my-network
+
+  auth:
+    build: ./auth
+    container_name: dc_auth
+    command: npm run start
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - MONGO_URL=mongodb://auth_db:27017/auth
+      - API_URL=http://api:3001/api
+    depends_on:
+      - auth_db
+    networks:
+      - my-network
+
+  api_db:
+    image: mongo:latest
+    container_name: dc_api-db
+    volumes:
+      - mongodb_api:/data/db
+    networks:
+      - my-network
+
+  auth_db:
+    image: mongo:latest
+    container_name: dc_auth-db
+    volumes:
+      - mongodb_auth:/data/db
+    networks:
+      - my-network
+
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: dc_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - api
+      - auth
+    networks:
+      - my-network
+
+
+
+volumes:
+  mongodb_api:
+  mongodb_auth:
+
+networks:
+  my-network:
+    driver: bridge
