@@ -69,10 +69,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios'
+import Vue from 'vue';
+import { Product } from '@/types'
 
-export default {
+// @ts-ignore
+
+export default  Vue.extend({
   data: () => ({
     mongoDb: 'mongoDb',
     sessionData: 'sessionData',
@@ -153,7 +157,7 @@ export default {
       this.mongoDb = response.data
     })
   }
-}
+})
 </script>
 
 <style lang="scss">
