@@ -14,15 +14,15 @@ const state = () => ({
   clientBasket: []
 }) as RootState
 
-const getters: GetterTree<RootState, RootState> = {
+const getters = {
   GET_PRODUCTS: (state: RootState): Product[] => state.laptops,
   GET_PRODUCT: (state: RootState) => (id: number): Product => {
     let productIndex = state.laptops.findIndex(item => item._id === id)
     return state.laptops[productIndex]
   },
-} as GetterTree<RootState, {}>
+} as GetterTree<RootState, {}>  // вариант #1
 
-const mutations: MutationTree<RootState> = {
+const mutations: MutationTree<RootState> = {    // вариант #2
   CHANGE_NAME: (state, newDescription: string) => state.laptops[0].description = newDescription,
   PUT_PRODUCT_TO_BASKET(state: RootState, id: number) {
     if (id > 0)   // добавляем
@@ -32,7 +32,7 @@ const mutations: MutationTree<RootState> = {
       Vue.delete(state.clientBasket, deletedProductIndex)
     }
   },
-} as MutationTree<RootState>
+}
 
 const actions: ActionTree<RootState, RootState> = {
   fetchThings({commit}): void {
@@ -43,10 +43,11 @@ const actions: ActionTree<RootState, RootState> = {
   add({commit, state}, text: string): void {
     commit('add', text)
   }
-} as ActionTree<RootState, {}>
+}
 
 export default new Vuex.Store<RootState>({
   state,
+  getters,
   mutations,
   actions,
   modules: {}
