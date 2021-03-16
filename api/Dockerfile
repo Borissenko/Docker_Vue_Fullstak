@@ -25,6 +25,7 @@ COPY package*.json ./
 # Устанавливаем в WORKDIR образа npm-пакеты, необходимые для сервиса.
 # Запуск npm install ВНУТРИ образа.
 RUN npm install
+RUN npm audit fix
 
 # Все остальные файлы из папки, в которой лежит Dockerfile, копируем внутрь WORKDIR образа,
 # все, КРОМЕ файлов, прописанных в .dockerignore,

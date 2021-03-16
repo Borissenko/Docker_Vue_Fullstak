@@ -23,8 +23,12 @@ const {initialLaptopData} = require('../initialData/laptopData')
 
 const app = express();
 
-app.use(bodyParser.json())
+app.use(bodyParser.json())            //(!) Обязателен для всех запросов, которые имеют pl.
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));  //что бы <form> могла поддерживать PUT и DELETE тоже, а не только POST и GET. Для меня не актуально.
+
+// ## Возможно, еще потребуется скорректировать 'content-type':
+// await axios.post(url, pl, {headers: {'content-type': 'application/json;charset=UTF-8'}})
 
 
 

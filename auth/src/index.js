@@ -1,9 +1,16 @@
 const express = require("express");
 const axios = require("axios");
+const bodyParser = require('body-parser')
 const { port, host, db, apiUrl } = require("./configuration");
 const { connectDb } = require("./helpers/db");
 
 const app = express();
+app.use(bodyParser.json())            //(!) Обязателен для всех запросов, которые имеют pl.
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// ## Возможно, еще потребуется скорректировать 'content-type':
+// await axios.post(url, pl, {headers: {'content-type': 'application/json;charset=UTF-8'}})
 
 app.get("/test", (req, res) => {
   res.send("Our AUTH-server is working");
