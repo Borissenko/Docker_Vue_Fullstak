@@ -24,11 +24,17 @@ app.get("/testwithapidata", (req, res) => {
   });
 })
 
-app.get("/api/kola", (req, res) => {
+//Запросы МЕЖДУ сервисами.
+//Запрос НЕ через nginx, поэтому НЕ ЗАБЫВАЕМ писать префикс "/api"(!).
+//В имени принимающего роутера должен фигурировать "/api"(!). Это МЕЖСЕРВИСНЫЙ запрос МИНУЯ NGNIX(!).
+app.get("/api/:userName", (req, res) => {
+  let userName = req.params.userName
   res.json({
-    auth: "kola is confirmed"
+    auth: `${userName} is confirmed`
   });
 });
+
+
 
 const startServer = () => {
   app.listen(port, () => {

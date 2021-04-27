@@ -117,8 +117,12 @@ app.delete("/diskImgs/:name", delOneDiskFile)
 //запрос на соседний сервис докера.
 app.get("/currentUser/:userName", async (req, res) => {
   let userName = req.params.userName
-  
-  await axios.get(authApiUrl + "/" + userName)
+
+  //Запрос НЕ через nginx, поэтому НЕ ЗАБЫВАЕМ писать в имени принимающего роутера префикс "/api"(!).
+  //Это МЕЖСЕРВИСНЫЙ запрос МИНУЯ NGNIX(!).
+  //Префикс "/api" добавляется из authApiUrl (http://auth:3002/api), и далее основное доменное имя http://auth:3002/ отбрасывается EXPRESSOM'ом.
+  //Поэтому в имени принимающего роутера должен фигурировать "/api"(!). Это МЕЖСЕРВИСНЫЙ запрос МИНУЯ NGNIX(!).
+  await axios.get(authApiUrl + "/" + userName)    //authApiUrl = 'http://auth:3002/api'
   .then(responseFromAuth => {
     res.json({
       isCurrentUser: true,
