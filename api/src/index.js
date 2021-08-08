@@ -132,6 +132,7 @@ app.get("/currentUser/:userName", async (req, res) => {
 })
 
 
+
 //функция по старту сервера.
 const startServer = async () => {
   //Загружаем в mongoDb начальные данные
